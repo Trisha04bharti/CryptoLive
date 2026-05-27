@@ -4,19 +4,48 @@
 //
 //  Created by Vikram Kumar on 09/05/26.
 //
-
 import SwiftUI
 
 struct ContentView: View {
+
+    @StateObject private var viewModel = CryptoViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+
+        NavigationView {
+
+            List(viewModel.cryptos) { crypto in
+
+                HStack {
+
+                    VStack(alignment: .leading, spacing: 4) {
+
+                        Text(crypto.name)
+                            .font(.headline)
+
+                        Text(crypto.symbol.uppercased())
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+
+                    Spacer()
+
+                    Text("$\(crypto.current_price, specifier: "%.2f")")
+                        .font(.headline)
+                        .foregroundColor(.green)
+                }
+                .padding(.vertical, 6)
+            }
+            .navigationTitle("Crypto Prices")
+            .task {
+                await viewModel.loadCryptos()
+            }
         }
-        .padding()
     }
+}
+
+#Preview {
+    ContentView()
 }
 
 #Preview {
