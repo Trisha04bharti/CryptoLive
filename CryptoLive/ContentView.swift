@@ -9,6 +9,16 @@ import SwiftUI
 struct ContentView: View {
 
     @StateObject private var viewModel = CryptoViewModel()
+    @State var searchText : String = ""
+    
+    var filtercryto : [Crypto] {
+        if searchText.isEmpty {
+            return viewModel.cryptos
+        }
+        else return viewModel.cryptos.filter {
+            $0.name.localizedCaseInsensitiveContains(searchText)
+        }
+    }
 
     var body: some View {
 
@@ -35,6 +45,7 @@ struct ContentView: View {
                         .foregroundColor(.green)
                 }
                 .padding(.vertical, 6)
+                
             }
             .navigationTitle("Crypto Prices")
             .task {
