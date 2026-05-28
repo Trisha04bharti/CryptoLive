@@ -15,9 +15,10 @@ struct ContentView: View {
         if searchText.isEmpty {
             return viewModel.cryptos
         }
-        else return viewModel.cryptos.filter {
+        else { return viewModel.cryptos.filter {
             $0.name.localizedCaseInsensitiveContains(searchText)
         }
+      }
     }
 
     var body: some View {
@@ -51,6 +52,9 @@ struct ContentView: View {
             .task {
                 await viewModel.loadCryptos()
             }
+            .searchable(text: $searchText ,
+                        placement: .navigationBarDrawer(displayMode: .always)
+              )
         }
     }
 }
